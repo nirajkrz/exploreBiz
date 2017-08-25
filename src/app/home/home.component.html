@@ -3,16 +3,28 @@
       <section class="innovation-workshop">
         <form action="" method="">		    
           <input type="search" placeholder="What are you looking for?" 
-          (keyup)="searchTerms.next($event.target.value)">		    	
+          (keyup)="searchTerms.next($event.target.value)" (focus)="focusFunction()">		    	
           <button>Search</button>
         </form>
-        <ul *ngIf="results" class="list-group">
-            <li class="list-group-item" *ngFor="let result of results | slice:0:9">
-              <a href="{{ result.latest }}" target="_blank">
+        <div id="map"></div>
+        <ul *ngIf="results && !detailsAvailable" class="list-group">
+            <li class="list-group-item" *ngFor="let result of results | slice:0:9" (click)="getPlaceDetails(result.place_id)" style="cursor: pointer">
+              <a>
                 {{ result.name }}
               </a>
+              <small style="color:slategrey; margin-left:12px">{{result.formatted_address}}</small>
+              <div style="color:slateblue; margin-left:12px"><strong>[Business Type]:</strong> <span *ngFor="let item of result.types">{{item}} ,</span></div>
             </li>
           </ul>
+         <div *ngIf="detailsAvailable" style="background-color: whitesmoke">
+           <h3>Details for {{details.name}} </h3>
+            <small [innerHtml]="details.adr_address"></small><br>
+            <small><strong>Rating: {{details.rating}}</strong></small><br>
+            <small><strong> Website:</strong> <a href="{{details.website}}">{{details.website}}</a></small><br>
+            <article>
+            <h4>Reviews:</h4>
+            </article>
+        </div> 
       </section>
   </div>
 </div>

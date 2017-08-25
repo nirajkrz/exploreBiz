@@ -10,10 +10,15 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
+import { ClientAuth } from '../shared/constants';
+
 @Injectable()
 export class SearchService {
   baseUrl = 'https://api.cdnjs.com/libraries';
   queryUrl = '?search=';
+
+  private googleSearchPlacesUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
+  private googlePlaceDetailsUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
 
   constructor(private http: Http) { }
 
@@ -27,5 +32,24 @@ export class SearchService {
     return this.http
         .get(this.baseUrl + this.queryUrl + term)
         .map(res => res.json());
+  }
+
+  searchPlaces(entry: Observable<string>){
+    return entry.debounceTime(400)
+    .distinctUntilChanged()
+    .switchMap(entry => this.searchPlacesAPI(entry));
+  }
+
+  searchPlacesAPI(entry){
+    entry = entry.split(/(\s+)/).join('+');
+    return this.http
+    .get(this.googleSearchPlacesUrl +entry+ '&key='+ ClientAuth.G_KEY)
+    .map(res => res.json());
+  }
+
+  getPlaceDetails(id){
+    return this.http
+    .get(this.googlePlaceDetailsUrl +id+'&key='+ ClientAuth.G_KEY)
+    .map(res => res.json());
   }
 }
