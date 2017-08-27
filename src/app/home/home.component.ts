@@ -16,7 +16,9 @@ export class HomeComponent implements OnInit {
   detailsAvailable: boolean = false;
 
   constructor(private searchService: SearchService) { }
-
+  title: string = 'My first AGM project';
+  lat: number = 51.678418;
+  lng: number = 7.809007;
   ngOnInit() {
     this.searchService.searchPlaces(this.searchTerms)
       .subscribe(results => {
@@ -34,6 +36,12 @@ export class HomeComponent implements OnInit {
   focusFunction(): void {
     //hide details div
     this.detailsAvailable = false;
+  }
+
+  removeSpecialChars(str) : string {
+    return str.replace(/(?!\w|\s)./g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
   }
 
 

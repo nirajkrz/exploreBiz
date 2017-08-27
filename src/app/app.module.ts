@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { NotFoundModule } from './not-found/not-found.module';
+import { AgmCoreModule } from '@agm/core';
 
 
 
@@ -27,7 +28,10 @@ import { NotFoundModule } from './not-found/not-found.module';
     AppRoutingModule,
     SharedModule,
     HomeModule,
-    NotFoundModule
+    NotFoundModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDPA6XKip7KNGNsGoXfJO-ZSj8A1hTD1K4'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,25 +6,50 @@
           (keyup)="searchTerms.next($event.target.value)" (focus)="focusFunction()">		    	
           <button>Search</button>
         </form>
-        <div id="map"></div>
         <ul *ngIf="results && !detailsAvailable" class="list-group">
             <li class="list-group-item" *ngFor="let result of results | slice:0:9" (click)="getPlaceDetails(result.place_id)" style="cursor: pointer">
               <a>
                 {{ result.name }}
               </a>
               <small style="color:slategrey; margin-left:12px">{{result.formatted_address}}</small>
-              <div style="color:slateblue; margin-left:12px"><strong>[Business Type]:</strong> <span *ngFor="let item of result.types">{{item}} ,</span></div>
+              <div style="color:slateblue; margin-left:12px"><strong>[Business Type]:</strong> 
+                <span *ngFor="let item of result.types; let isLast=last" >{{item}}{{isLast ? '' : ', '}}</span></div>
             </li>
           </ul>
-         <div *ngIf="detailsAvailable" style="background-color: whitesmoke">
-           <h3>Details for {{details.name}} </h3>
-            <small [innerHtml]="details.adr_address"></small><br>
-            <small><strong>Rating: {{details.rating}}</strong></small><br>
-            <small><strong> Website:</strong> <a href="{{details.website}}">{{details.website}}</a></small><br>
-            <article>
-            <h4>Reviews:</h4>
-            </article>
-        </div> 
+         <div *ngIf="detailsAvailable" style="background-color: whitesmoke" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="container">
+                <agm-map [latitude]="details.geometry.location.lat" [longitude]="details.geometry.location.lng" style="height: 300px;">
+                    <agm-marker [latitude]="details.geometry.location.lat" [longitude]="details.geometry.location.lng"></agm-marker>
+                </agm-map>
+              <div class="row">
+                  
+                          <div class="col-md-4 col-sm-4 mb-4">
+                              <h4 class="my-4">{{details.name}} </h4>
+                              <small [innerHtml]="details.adr_address"></small><br>
+                              <small><strong>Rating: {{details.rating}}</strong></small><br>
+                              <small style="word-wrap: break-word"><strong> Website:</strong> <a href="{{details.website}}">{{details.website}}</a></small><br>
+                              <strong>Business Type:</strong>
+                                  <span *ngFor="let item of details.types; let isLast=last" >{{removeSpecialChars(item)}}{{isLast ? '' : ', '}}</span>
+                          </div>
+                  
+                          <div class="col-md-4 col-sm-4 mb-4">
+                            <h4> Reviews:</h4>
+                            <div class="col-sm-12 col-md-12 col-mb-12">
+
+                            </div>
+
+                          </div>
+                  
+                          <div class="col-md-4 col-sm-4 mb-4">
+                            <a href="#">
+                              <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+                            </a>
+                          </div>
+                  
+                        </div>
+           </div>
+           
+        </div>
       </section>
   </div>
 </div>
