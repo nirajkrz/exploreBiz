@@ -2,6 +2,7 @@
   "name": "explore-biz",
   "version": "0.0.0",
   "license": "MIT",
+  "homepage": "https://nirajkrz.github.io/exploreBiz/",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
